@@ -1,7 +1,10 @@
-import{ useState, useEffect } from 'react';
+import{ useState, useEffect, Fragment } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Tasks from './components/Tasks';
 import AddTask from './components/AddTask';
+import Footer from './components/Footer';
+import About from './components/About';
 const App = () => {
   const[showAddTask, setShowAddTask] = useState(false)
 
@@ -78,13 +81,28 @@ const deleteTask = async (id) => {
   }
 
 
-  return (   
+  return ( 
+    <Router>  
     <div className="container"> 
       <Header onAdd={() => setShowAddTask(!showAddTask)} 
       showAdd={showAddTask}/>
-      {showAddTask && <AddTask onAdd={addTask}/>}
-      {tasks.length > 0 ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder}/> :'No tasks to display'}
+  
+      <Route path='/' exact render={(props) => (
+        <Fragment>
+        {showAddTask && <AddTask onAdd={addTask}/>}
+        {tasks.length > 0 ? (<Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder}/> ): (
+          'No tasks to display'
+          )}
+        </Fragment>
+
+      )}/>
+      <Route path='/about' component={About}/>
+        <Footer/>
+      
+      
     </div>
+    
+    </Router>
   );
 }
 
